@@ -1,0 +1,14 @@
+# Base image
+FROM node:21
+
+# Set working directory
+WORKDIR /app
+
+RUN mkdir -p /app/client
+COPY client-app /app/client
+
+# install dependencies
+RUN npm install --prefix client
+
+# build the static files for the client
+CMD npm run build --prefix client
