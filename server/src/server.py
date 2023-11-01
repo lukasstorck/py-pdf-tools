@@ -11,7 +11,7 @@ from fastapi.staticfiles import StaticFiles
 from traceback import format_exc
 
 
-from src.pdf_tools import Document
+from src.pdf_tools_core import Document
 
 app = FastAPI(title='webpage-app')
 api_app = FastAPI(title='api-app')
@@ -50,26 +50,27 @@ app.mount('/', StaticFiles(directory='client', html=True), name='client')
 @api_app.post('/process-files')
 async def process_files(files: list[UploadFile], actions: list[str]):
     try:
-        processed_files: list[tuple[str, io.BytesIO]] = []
+        processed_files: list[Document] = []
         for file in files:
             content = await file.read()
-            doc = Document(file.filename, stream=content)
+            doc = Document(filename=file.filename, data=content)
             for action in actions:
                 if action == 'remove_watermarks':
                     doc.remove_watermarks()
                 elif action == 'unlock_permissions':
                     doc.unlock_permissions()
-
-            processed_files.append((str(doc.file), doc.to_bytesIO()))
+            processed_files.append(doc)
 
         if len(processed_files) == 1:
-            output_file_name, output_file_content = processed_files[0]
+            doc = processed_files[0]
+            output_file_name = doc.file
+            output_file_content = doc.to_bytesIO()
             content_type = 'application/pdf'
         else:
             zip_buffer = io.BytesIO()
             with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zipf:
-                for filename, processed_file in processed_files:
-                    zipf.writestr(filename, processed_file.getvalue())
+                for doc in processed_files:
+                    zipf.writestr(doc.file, doc.to_bytes())
             zip_buffer.seek(0)
 
             output_file_name = 'processed_files.zip'
