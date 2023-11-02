@@ -1,9 +1,9 @@
-# PDF Tools
+# Py PDF Tools
 
-A small collection of tools for pdf files built upon FastAPI and PyMuPDF with Docker.
-The docker stack runs a web server which provides a front-end for the user to upload files and select the desired tasks.
+A small collection of tools for pdf files built upon PyMuPDF.
+A docker stack runs a web server which provides a front-end for the user to upload files and select the desired tasks.
 It also provides an API which handles and processes the requested tasks.
-It is also possible to use the tool locally via the command line or by importing the [package](server/src/pdf_tools.py).
+It is also possible to use the tool locally via the command line `python pdf_tools_cli.py -h` or by importing the [core package](./server/src/pdf_tools_core.py).
 
 ## Installation and Usage
 
@@ -20,6 +20,8 @@ Download, build and run the docker stack
 docker compose up -d
 ```
 
+Open the browser on <a href="http://localhost:8080" target="_blank">localhost:8080</a> or whatever port you choose in the [docker configuration](./docker-compose.yaml).
+
 ## Bookmark Editor
 
 Bookmark editing is currently not included in the server, but can be accessed via the command line interface.
@@ -30,9 +32,9 @@ This can then be edited and then recombined into a new pdf file with updated boo
 Example:
 
 ```sh
-python server/src/pdf_tools.py path/to/pdf/file/or/folder.pdf -a edit_bookmarks
+python pdf_tools_cli.py path/to/file/or/folder.pdf -a edit_bookmarks
 # edit the .json file
-python server/src/pdf_tools.py path/to/pdf/file/or/folder.pdf -a edit_bookmarks save
+python pdf_tools_cli.py path/to/file/or/folder.pdf -a edit_bookmarks save
 ```
 
 ### Dependencies
