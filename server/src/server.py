@@ -13,8 +13,8 @@ from traceback import format_exc
 
 from src.pdf_tools_core import Document
 
-app = FastAPI(title='webpage-app')
-api_app = FastAPI(title='api-app')
+app = FastAPI(title='webpage-app', docs_url=None)
+api_app = FastAPI(title='api-app', docs_url=None)
 
 website_path = pathlib.Path('src/website.html')
 logs_path = pathlib.Path('logs/')
