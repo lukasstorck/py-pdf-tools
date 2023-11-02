@@ -48,6 +48,8 @@ def _get_documents(path, recursive=False) -> list[Document]:
 
 
 def _perform_action(doc: Document, action: str):
+    global output_path
+
     if action.lower() in ['remove_watermarks']:
         doc.remove_watermarks()
     elif action.lower() in ['unlock_permissions']:
@@ -83,7 +85,7 @@ def _perform_action(doc: Document, action: str):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Parse a path or filename and perform actions.")
+    parser = argparse.ArgumentParser(description="PDF tools provides helper tools for PDF documents, which can be selected via the actions argument. These actions are then applied to all selected files.")
     parser.add_argument('file', help='Path or filename to process')
     parser.add_argument('-r', '--recursive', action='store_true', help='Recursively process directory')
     parser.add_argument('-a', '--actions', nargs='*',
