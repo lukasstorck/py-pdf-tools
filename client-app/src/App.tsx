@@ -65,10 +65,9 @@ function App() {
 
     try {
       const formData = new FormData();
-      formData.append(
-        "actions",
-        selectedActions.map((action) => action.id).join(",")
-      );
+      selectedActions.forEach((action) => {
+        formData.append("actions", action.id);
+      });
       selectedFiles.forEach((file) => {
         formData.append("files", file);
       });
