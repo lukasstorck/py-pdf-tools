@@ -4,6 +4,7 @@ import os
 import pathlib
 import uvicorn
 import zipfile
+import logging
 
 from fastapi import FastAPI, HTTPException, status, UploadFile
 from fastapi.responses import StreamingResponse
@@ -51,6 +52,13 @@ app.mount('/', StaticFiles(directory='client', html=True), name='client')
 async def process_files(files: list[UploadFile], actions: list[str]):
     try:
         processed_files: list[Document] = []
+
+        if len(actions) == 1:
+            # actions were recognized as string and not comma separated list of strings
+            # still works if there is only one element in the string
+            actions = actions[0].split(',')
+        logging.debug(f'selected actions: "{actions}".')
+
         for file in files:
             content = await file.read()
             doc = Document(filename=file.filename, data=content)
