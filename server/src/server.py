@@ -70,7 +70,7 @@ async def process_files(files: list[UploadFile], actions: list[str]):
             zip_buffer = io.BytesIO()
             with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zipf:
                 for doc in processed_files:
-                    zipf.writestr(doc.file, doc.to_bytes())
+                    zipf.writestr(str(doc.file), doc.to_bytes())
             zip_buffer.seek(0)
 
             output_file_name = 'processed_files.zip'
